@@ -1,4 +1,4 @@
-# Use the official Golang image
+# Use the official Golang image as the builder
 FROM golang:1.22 AS builder
 
 # Set the Current Working Directory inside the container
