@@ -11,10 +11,10 @@ import (
 // SetupRoutes sets up all the routes for the application
 func SetupRoutes(app *fiber.App, cfg model.Config) {
 	// Route Group of V1
-	api := app.Group("/api/v1")
-	api.Get("/", func(c *fiber.Ctx) error {
+	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Redirect("/api/v1/pokemon", fiber.StatusMovedPermanently)
 	})
+	api := app.Group("/api/v1")
 	api.Get("/pokemon", func(c *fiber.Ctx) error {
 		return controller.GetPokemonList(c, cfg)
 	})

@@ -22,9 +22,11 @@ func getEnv(key, defaultValue string) string {
 
 // LoadEnv loads environment variables and returns the configuration struct
 func LoadEnv() model.Config {
-	// Load environment variables from .env file
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+	// Only load .env file in development or if explicitly needed
+	if os.Getenv("ENVIRONMENT") != "production" {
+		if err := godotenv.Load(); err != nil {
+			log.Printf("Error loading .env file: %v", err)
+		}
 	}
 
 	// Fetch environment variables with defaults
@@ -42,9 +44,7 @@ func LoadEnv() model.Config {
 		limitPerPage = 10
 	}
 
-	if environment != "production" {
-		baseURL = fmt.Sprintf("%s:%s/api/%s", baseURL, port, apiVersion)
-	}
+	baseURL = fmt.Sprintf("%s:%s/api/%s", baseURL, port, apiVersion)
 	log.Printf("%s", baseURL)
 
 	// Construct and return the Config struct
@@ -54,5 +54,6 @@ func LoadEnv() model.Config {
 		SourceURL:    sourceURL,
 		Port:         port,
 		LimitPerPage: limitPerPage,
+		Environment:  environment,
 	}
 }
